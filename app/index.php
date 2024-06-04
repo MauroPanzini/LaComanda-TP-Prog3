@@ -15,6 +15,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require_once './db/AccesoDatos.php';
 require_once './middlewares/Logger.php';
 
+require_once './controllers/EmpleadoController.php';
 require_once './controllers/UsuarioController.php';
 require_once './controllers/ProductoController.php';
 require_once './controllers/MesaController.php';
@@ -36,13 +37,21 @@ $app->addErrorMiddleware(true, true, true);
 // Add parse body
 $app->addBodyParsingMiddleware();
 
-// Usuarios
-$app->group('/usuarios', function (RouteCollectorProxy $group) {
-    $group->get('[/]', \UsuarioController::class . ':TraerTodos');
-    $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
-    $group->post('[/]', \UsuarioController::class . ':CargarUno');
-    $group->delete('[/]', \UsuarioController::class . ':BorrarUno');
+// Empleados
+$app->group('/empleados', function (RouteCollectorProxy $group) {
+    $group->get('[/]', \EmpleadoController::class . ':TraerTodos');
+    $group->get('/{empleado}', \EmpleadoController::class . ':TraerUno');
+    $group->post('[/]', \EmpleadoController::class . ':CargarUno');
+    $group->delete('[/]', \EmpleadoController::class . ':BorrarUno');
   });
+
+  // Usuarios
+$app->group('/usuarios', function (RouteCollectorProxy $group) {
+  $group->get('[/]', \UsuarioController::class . ':TraerTodos');
+  $group->get('/{usuario}', \UsuarioController::class . ':TraerUno');
+  $group->post('[/]', \UsuarioController::class . ':CargarUno');
+  $group->delete('[/]', \UsuarioController::class . ':BorrarUno');
+});
 
   // Productos
 $app->group('/productos', function (RouteCollectorProxy $group) {

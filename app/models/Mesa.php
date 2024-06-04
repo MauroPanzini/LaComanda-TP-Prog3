@@ -4,6 +4,7 @@ class Mesa
 {
     public $id;
     public $capacidad;
+    public $disponible;
 
     public function crearMesa()
     {
@@ -18,7 +19,7 @@ class Mesa
     public static function obtenerTodos()
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, capacidad FROM mesas");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, capacidad, disponible FROM mesas");
         $consulta->execute();
 
         return $consulta->fetchAll(PDO::FETCH_CLASS, 'Mesa');
@@ -27,7 +28,7 @@ class Mesa
     public static function obtenerMesa($id)
     {
         $objAccesoDatos = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, capacidad FROM mesas WHERE id = :id");
+        $consulta = $objAccesoDatos->prepararConsulta("SELECT id, capacidad, disponible FROM mesas WHERE id = :id");
         $consulta->bindValue(':id', $id, PDO::PARAM_INT);
         $consulta->execute();
 
@@ -37,8 +38,9 @@ class Mesa
     public function modificarMesa($id)
     {
         $objAccesoDato = AccesoDatos::obtenerInstancia();
-        $consulta = $objAccesoDato->prepararConsulta("UPDATE mesas SET capacidad = :capacidad WHERE id = :id");
+        $consulta = $objAccesoDato->prepararConsulta("UPDATE mesas SET capacidad = :capacidad, disponible = :disponible WHERE id = :id");
         $consulta->bindValue(':capacidad', $this->capacidad, PDO::PARAM_INT);
+        $consulta->bindValue(':disponible', $this->disponible, PDO::PARAM_BOOL);
         $consulta->bindValue(':id', $this->id, PDO::PARAM_INT);
         $consulta->execute();
     }

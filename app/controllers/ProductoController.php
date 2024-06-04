@@ -9,11 +9,13 @@ class ProductoController extends Producto implements IApiUsable
         $parametros = $request->getParsedBody();
 
         $producto = $parametros['producto'];
+        $tipoProducto = $parametros['tipoProducto'];
         $precio = $parametros['precio'];
 
         // Creamos el producto
         $prod = new producto();
         $prod->producto = $producto;
+        $prod->tipoProducto = $tipoProducto;
         $prod->precio = $precio;
         $prod->crearProducto();
 

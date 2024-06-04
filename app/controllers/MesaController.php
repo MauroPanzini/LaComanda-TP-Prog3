@@ -9,7 +9,6 @@ class MesaController extends Mesa implements IApiUsable
         $parametros = $request->getParsedBody();
 
         $capacidad = $parametros['capacidad'];
-
         // Creamos la mesa
         $mesa = new Mesa();
         $mesa->capacidad = $capacidad;

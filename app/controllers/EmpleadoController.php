@@ -1,25 +1,25 @@
 <?php
-require_once './models/Usuario.php';
+require_once './models/Empleado.php';
 require_once './interfaces/IApiUsable.php';
 
-class UsuarioController extends Usuario implements IApiUsable
+class EmpleadoController extends Empleado implements IApiUsable
 {
     public function CargarUno($request, $response, $args)
     {
         $parametros = $request->getParsedBody();
 
-        $usuario = $parametros['usuario'];
+        $empleado = $parametros['empleado'];
         $clave = $parametros['clave'];
-        $idPedido = $parametros['idPedido'];
+        $puesto = $parametros['puesto'];
 
-        // Creamos el usuario
-        $usr = new Usuario();
-        $usr->usuario = $usuario;
-        $usr->clave = $clave;
-        $usr->idPedido = $idPedido;
-        $usr->crearUsuario();
+        // Creamos el empleado
+        $emp = new Empleado();
+        $emp->empleado = $empleado;
+        $emp->clave = $clave;
+        $emp->puesto = $puesto;
+        $emp->crearEmpleado();
 
-        $payload = json_encode(array("mensaje" => "Usuario creado con exito"));
+        $payload = json_encode(array("mensaje" => "Empleado creado con exito"));
 
         $response->getBody()->write($payload);
         return $response
@@ -28,10 +28,10 @@ class UsuarioController extends Usuario implements IApiUsable
 
     public function TraerUno($request, $response, $args)
     {
-        // Buscamos usuario por nombre
-        $usr = $args['usuario'];
-        $usuario = Usuario::obtenerUsuario($usr);
-        $payload = json_encode($usuario);
+        // Buscamos empleado por nombre
+        $emp = $args['empleado'];
+        $empleado = Empleado::obtenerEmpleado($emp);
+        $payload = json_encode($empleado);
 
         $response->getBody()->write($payload);
         return $response
@@ -40,8 +40,8 @@ class UsuarioController extends Usuario implements IApiUsable
 
     public function TraerTodos($request, $response, $args)
     {
-        $lista = Usuario::obtenerTodos();
-        $payload = json_encode(array("listaUsuario" => $lista));
+        $lista = Empleado::obtenerTodos();
+        $payload = json_encode(array("listaEmpleado" => $lista));
 
         $response->getBody()->write($payload);
         return $response
@@ -53,9 +53,9 @@ class UsuarioController extends Usuario implements IApiUsable
         $parametros = $request->getParsedBody();
 
         $id = $parametros['id'];
-        Usuario::modificarUsuario($id);
+        Empleado::modificarEmpleado($id);
 
-        $payload = json_encode(array("mensaje" => "Usuario modificado con exito"));
+        $payload = json_encode(array("mensaje" => "Empleado modificado con exito"));
 
         $response->getBody()->write($payload);
         return $response
@@ -67,9 +67,9 @@ class UsuarioController extends Usuario implements IApiUsable
         $parametros = $request->getParsedBody();
 
         $id = $parametros['id'];
-        Usuario::borrarUsuario($id);
+        Empleado::borrarEmpleado($id);
 
-        $payload = json_encode(array("mensaje" => "Usuario borrado con exito"));
+        $payload = json_encode(array("mensaje" => "Empleado borrado con exito"));
 
         $response->getBody()->write($payload);
         return $response
