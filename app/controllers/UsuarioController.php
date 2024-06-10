@@ -1,6 +1,7 @@
 <?php
 require_once './models/Usuario.php';
 require_once './interfaces/IApiUsable.php';
+require_once './middlewares/ValidacionUsuario.php';
 
 class UsuarioController extends Usuario implements IApiUsable
 {
@@ -12,15 +13,22 @@ class UsuarioController extends Usuario implements IApiUsable
         $clave = $parametros['clave'];
         $idPedido = $parametros['idPedido'];
 
-        // Creamos el usuario
-        $usr = new Usuario();
-        $usr->usuario = $usuario;
-        $usr->clave = $clave;
-        $usr->idPedido = $idPedido;
-        $usr->crearUsuario();
+        if(ValidacionUsuario::validarUsuario($usuario) && ValidacionUsuario::validarClave($clave)){
+          $usr = new Usuario();
+          $usr->usuario = $usuario;
+          $usr->clave = $clave;
+          $usr->idPedido = $idPedido;
+          $usr->crearUsuario();
+  
+          $payload = json_encode(array("mensaje" => "Usuario creado con exito"));
 
-        $payload = json_encode(array("mensaje" => "Usuario creado con exito"));
-
+        }
+        else{
+          $payload = json_encode(array("mensaje" => "El usuario no pudo ser creado, usuario o contraseña inválido"));
+          $response->getBody()->write($payload);
+          return $response
+            ->withHeader('Content-Type', 'application/json');
+        }
         $response->getBody()->write($payload);
         return $response
           ->withHeader('Content-Type', 'application/json');
