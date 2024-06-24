@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "202cca32-1d06-4143-854e-9960d03efa1d",
+		"name": "Sprint_2_TP_LaComanda",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27392307"
+	},
+	"item": [
+		{
+			"name": "SubidaArchivosCsv",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "csvFile",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/LaComanda-TP-Prog3/app/archivos/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"LaComanda-TP-Prog3",
+						"app",
+						"archivos",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DescargaArchivosCsv",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/LaComanda-TP-Prog3/app/archivos/download",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"LaComanda-TP-Prog3",
+						"app",
+						"archivos",
+						"download"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
