@@ -1,38 +1,39 @@
 <?php
-
-class Archivo{
-
-    function subirArchivo(){
+class Archivo {
+    function subirArchivo($request, $response, $args) {
         if (isset($_POST['submit'])) {
-            // Directorio donde se guardará el archivo subido
-            $targetDir = "uploads/";
-            // Nombre del archivo subido
+
+            $targetDir = "./uploads/";
+
             $targetFile = $targetDir . basename($_FILES["csvFile"]["name"]);
-            // Tipo de archivo (mime type)
+
             $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-        
-            // Verificar si el archivo es un CSV
+            
+            //verificacion en middleware???
             if($fileType != "csv") {
-                echo "Lo siento, solo se permiten archivos CSV.";
-                exit();
+                $response->getBody()->write("Error, solo se permiten archivos CSV.");
+                return $response;
             }
         
-            // Intentar subir el archivo
+            // Intentar subir el archivo - - - try catch??
             if (move_uploaded_file($_FILES["csvFile"]["tmp_name"], $targetFile)) {
-                echo "El archivo " . htmlspecialchars(basename($_FILES["csvFile"]["name"])) . " ha sido subido.";
+                $response->getBody()->write("El archivo " . htmlspecialchars(basename($_FILES["csvFile"]["name"])) . " ha sido subido.");
+                return $response;
             } else {
-                echo "Lo siento, hubo un error al subir tu archivo.";
+                $response->getBody()->write("Se produjo un error en la subida del archivo.");
+                return $response;
             }
         } else {
-            echo "No se ha enviado ningún archivo.";
+            $response->getBody()->write("No se ha enviado ningún archivo.");
+            return $response;
         }
-    
     }
-    function descargarArchivo(){
-            // Nombre del archivo CSV que se descargará
+
+    function descargarArchivo($request, $response, $args) {
+
         $filename = "data_" . date('Ymd') . ".csv";
     
-        // Crear un array con datos de ejemplo (puedes modificar esto con tus propios datos)
+        // ejemplo de data
         $data = [
             ["Nombre", "Edad", "Correo Electrónico"],
             ["Juan Pérez", 28, "juan.perez@example.com"],
@@ -40,20 +41,19 @@ class Archivo{
             ["Carlos López", 40, "carlos.lopez@example.com"]
         ];
     
-        // Configurar las cabeceras para forzar la descarga del archivo
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment;filename=' . $filename);
+        // Configurar las cabeceras para forzar la descarga del archivo -- solo navegador, postman no se D:
+        $response = $response
+            ->withHeader('Content-Type', 'text/csv')
+            ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
     
-        // Abrir la salida para escribir el contenido del CSV
         $output = fopen('php://output', 'w');
     
-        // Escribir cada fila de datos en el archivo CSV
         foreach ($data as $row) {
             fputcsv($output, $row);
         }
     
-        // Cerrar el flujo de salida
         fclose($output);
+    
+        return $response;
     }
 }
-?>

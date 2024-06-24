@@ -22,4 +22,3 @@ class ValidacionUsuario
         return true;
     }
 }
-?>
